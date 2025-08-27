@@ -1,68 +1,39 @@
+import { FlatCompat } from "@eslint/eslintrc";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-
-import { FlatCompat } from "@eslint/eslintrc";
-import importPlugin from "eslint-plugin-import";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+const compat = new FlatCompat({ baseDirectory: __dirname });
 
+//  assign to a named variable
 const eslintConfig = [
-  ...compat.extends(
-    "next/core-web-vitals",
-    "next/typescript",
-    "standard",
-    "prettier"
-  ),
+  // Extend Next.js + Prettier configs
+  ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
+
   {
     languageOptions: {
       globals: {
-        React: "writable", // ✅ stops no-undef error
+        React: "writable", // avoids no-undef in JSX
       },
-    },
-    plugins: {
-      import: importPlugin,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
     },
     rules: {
       "react/react-in-jsx-scope": "off",
-      "import/order": [
-        "error",
-        {
-          groups: [
-            "builtin",
-            "external",
-            "internal",
-            ["parent", "sibling"],
-            "index",
-            "object",
-          ],
-          "newlines-between": "always",
-          pathGroups: [
-            {
-              pattern: "@app/**",
-              group: "external",
-              position: "after",
-            },
-          ],
-          pathGroupsExcludedImportTypes: ["builtin"],
-          alphabetize: {
-            order: "asc",
-            caseInsensitive: true,
-          },
-        },
-      ],
     },
   },
+
   {
     ignores: [
       "node_modules/**",
       ".next/**",
-      "out/**",
+      "dist/**",
       "build/**",
+      "out/**",
       "next-env.d.ts",
     ],
   },
