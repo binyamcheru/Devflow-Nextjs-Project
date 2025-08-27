@@ -43,8 +43,9 @@
 
   --breakpoint-xs: 420px;
 
-  --font-inter: var(--font-inter);
   --font-space-grotesk: var(--font-space-grotesk);
+  --font-inter: var(--font-inter), sans-serif;
+  --font-lobster: var(--font-lobster), cursive;
 }
 
 /*
