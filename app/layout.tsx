@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Lobster } from "next/font/google";
-
+import { Inter, Space_Grotesk as SpaceGrotesk } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/context/Theme";
+import Navbar from "../components/navigation/navbar";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter", // expose Inter as a CSS variable
 });
 
-const lobster = Lobster({
-  weight: "400",
+const spaceGrotesk = SpaceGrotesk({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-lobster",
+  variable: "--font-space-grotesk",
 });
 
 export const metadata: Metadata = {
@@ -31,13 +31,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${lobster.variable} antialiased`}>
+      <body
+        className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          <Navbar />
           {children}
         </ThemeProvider>
       </body>
