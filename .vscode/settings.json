@@ -25,6 +25,13 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "**/.vscode": true,
+    "**/node_modules": true,
+    // "**/.hg": true,
+    // "**/.DS_Store": true,
+    "**/next-env.d.ts": true
+  },
 
   "json.schemas": [
     {
