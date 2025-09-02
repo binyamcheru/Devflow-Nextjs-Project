@@ -5,7 +5,7 @@ const Home = async () => {
   console.log(session);
   return (
     <>
-      <h1 className="text-2xl text-white pt-24">DevFlow</h1>
+      <h1 className="text-2xl text-white">DevFlow</h1>
     </>
   );
 };
