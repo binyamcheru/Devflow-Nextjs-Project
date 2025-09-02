@@ -10,7 +10,7 @@ const Home = async () => {
       <h1 className="text-2xl text-white pt-24">DevFlow</h1>
       <form
         className="px-10 pt-[100px]"
-        action={async () => {auth
+        action={async () => {
           "use server";
           await signOut({ redirectTo: ROUTES.SIGN_IN });
         }}
