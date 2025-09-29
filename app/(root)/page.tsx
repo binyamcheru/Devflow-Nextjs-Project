@@ -1,3 +1,4 @@
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -11,10 +12,16 @@ const questions = [
     description: "I want to learn React, can anyone help me.",
     tags: [
       { _id: "1", name: "React" },
-      { _id: "1", name: "Javascript" },
+      { _id: "2", name: "Javascript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png",
+    },
     upvotes: 10,
+    views: 500,
     answers: 5,
     createdAt: new Date(),
   },
@@ -24,10 +31,16 @@ const questions = [
     description: "I want to learn React, can anyone help me.",
     tags: [
       { _id: "1", name: "React" },
-      { _id: "1", name: "Javascript" },
+      { _id: "2", name: "Javascript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "2",
+      name: "John Doe",
+      image:
+        "https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png",
+    },
     upvotes: 10,
+    views: 100,
     answers: 5,
     createdAt: new Date(),
   },
@@ -38,7 +51,7 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-  const { query = "" , filter = "" } = await searchParams;
+  const { query = "", filter = "" } = await searchParams;
 
   const filteredQuestions = questions.filter((question) =>
     question.title.toLowerCase().includes(query?.toLowerCase())
@@ -65,10 +78,10 @@ const Home = async ({ searchParams }: SearchParams) => {
           otherClasses="flex-1"
         />
       </section>
-      <HomeFilter/>
+      <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
