@@ -1,7 +1,18 @@
 "use client";
 
-import { DefaultValues, FieldValues, Path, useForm } from "react-hook-form";
-import { z, ZodType } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  DefaultValues,
+  FieldValues,
+  Path,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import { ZodType } from "zod";
+
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,16 +21,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import ROUTES from "@/constants/routes";
+import { toast } from "sonner";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
-  defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  defaultValues: DefaultValues<T>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
   formType: "SIGN_IN" | "SIGN_UP";
 }
 
@@ -29,26 +38,46 @@ const AuthForm = <T extends FieldValues>({
   formType,
   onSubmit,
 }: AuthFormProps<T>) => {
-  const form = useForm<z.infer<typeof schema>>({
+  const router = useRouter();
+
+  const form = useForm<T>({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues as DefaultValues<T>,
+    defaultValues,
   });
 
-  const handleSubmit = async () => {};
+  const handleSubmit: SubmitHandler<T> = async (data) => {
+    const result = await onSubmit(data);
+
+    if (result?.success) {
+      toast(
+        formType === "SIGN_IN"
+          ? "Signed in successfully"
+          : "Signed up successfully"
+      );
+      router.push(ROUTES.HOME);
+    } else {
+      toast(result?.error?.message || `Error ${result?.status}`, {
+        style: { background: "#ff4d4f", color: "#fff" },
+      });
+    }
+  };
 
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
 
   return (
     <Form {...form}>
-      <form className="mt-10 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="mt-10 space-y-6"
+      >
         {Object.keys(defaultValues).map((field) => (
           <FormField
             key={field}
-            control={form.control as any}
+            control={form.control}
             name={field as Path<T>}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>
+              <FormItem className="flex w-full flex-col gap-2.5">
+                <FormLabel className="paragraph-medium text-dark400_light700">
                   {field.name === "email"
                     ? "Email Address"
                     : field.name.charAt(0).toUpperCase() + field.name.slice(1)}
@@ -56,11 +85,7 @@ const AuthForm = <T extends FieldValues>({
                 <FormControl>
                   <Input
                     required
-                    type={
-                      field.name === "password" || field.name === "email"
-                        ? field.name
-                        : "text"
-                    }
+                    type={field.name === "password" ? "password" : "text"}
                     {...field}
                     className="paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 no-focus min-h-12 rounded-1.5 border"
                   />
@@ -70,16 +95,18 @@ const AuthForm = <T extends FieldValues>({
             )}
           />
         ))}
+
         <Button
           disabled={form.formState.isSubmitting}
           className="primary-gradient paragraph-medium min-h-12 w-full rounded-2 px-4 py-3 font-inter !text-light-900"
         >
           {form.formState.isSubmitting
             ? buttonText === "Sign In"
-              ? "Signin In..."
+              ? "Signing In..."
               : "Signing Up..."
             : buttonText}
         </Button>
+
         {formType === "SIGN_IN" ? (
           <p>
             Don&apos;t have an account?{" "}
@@ -105,4 +132,5 @@ const AuthForm = <T extends FieldValues>({
     </Form>
   );
 };
+
 export default AuthForm;
