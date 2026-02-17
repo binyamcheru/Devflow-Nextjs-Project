@@ -1,9 +1,21 @@
 "use client";
 
-import { z } from "zod";
-import { AskQuestionSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { MDXEditorMethods } from "@mdxeditor/editor";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import React, { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import ROUTES from "@/constants/routes";
+import { toast } from "sonner";
+import { createQuestion } from "@/lib/actions/question.action";
+import { AskQuestionSchema } from "@/lib/validations";
+
+import TagCard from "../cards/TagCard";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -12,21 +24,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { MDXEditorMethods } from "@mdxeditor/editor";
-import { useRef } from "react";
-import dynamic from "next/dynamic";
-import TagCard from "@/components/cards/TagCard";
+} from "../ui/form";
+import { Input } from "../ui/input";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
 const QuestionForm = () => {
+  const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
-  const form = useForm({
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
       title: "",
@@ -75,8 +85,40 @@ const QuestionForm = () => {
     }
   };
 
-  const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-    console.log(data);
+  const handleCreateQuestion = async (
+    data: z.infer<typeof AskQuestionSchema>
+  ) => {
+    startTransition(async () => {
+      const result = await createQuestion(data);
+
+      if (result.success) {
+        toast.success("Question created successfully 🎉", {
+          duration: 3000,
+          style: {
+            borderRadius: "10px",
+            background: "#111",
+            color: "#fff",
+            padding: "12px 16px",
+          },
+        });
+
+        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+      } else {
+        toast.error(
+          result.error?.message
+            ? `Error ${result.status}: ${result.error.message}`
+            : `Error ${result.status}: Something went wrong`,
+          {
+            duration: 4000,
+            style: {
+              borderRadius: "10px",
+              background: "#2b0000",
+              color: "#fff",
+            },
+          }
+        );
+      }
+    });
   };
 
   return (
@@ -95,7 +137,7 @@ const QuestionForm = () => {
               </FormLabel>
               <FormControl>
                 <Input
-                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
+                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-14 border"
                   {...field}
                 />
               </FormControl>
@@ -113,7 +155,7 @@ const QuestionForm = () => {
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
               <FormLabel className="paragraph-semibold text-dark400_light800">
-                Detailed explanation of your problem
+                Detailed explanation of your problem{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
@@ -142,7 +184,7 @@ const QuestionForm = () => {
               <FormControl>
                 <div>
                   <Input
-                    className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
+                    className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-14 border"
                     placeholder="Add tags..."
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
                   />
@@ -175,13 +217,22 @@ const QuestionForm = () => {
         <div className="mt-16 flex justify-end">
           <Button
             type="submit"
-            className="primary-gradient w-fit !text-light-900"
+            disabled={isPending}
+            className="primary-gradient w-fit text-light-900!"
           >
-            Ask a Question
+            {isPending ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                <span>Submitting</span>
+              </>
+            ) : (
+              <>Ask A Question</>
+            )}
           </Button>
         </div>
       </form>
     </Form>
   );
 };
+
 export default QuestionForm;
