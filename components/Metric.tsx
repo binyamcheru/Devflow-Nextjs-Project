@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 
 interface Props {
   imgUrl: string;
@@ -22,6 +23,7 @@ const Metric = ({
   href,
   textStyles,
   imgStyles,
+  isAuthor,
   titleStyles,
 }: Props) => {
   const metricContent = (
@@ -54,4 +56,5 @@ const Metric = ({
     <div className="flex-center gap-1">{metricContent}</div>
   );
 };
+
 export default Metric;
