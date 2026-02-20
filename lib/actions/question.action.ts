@@ -1,6 +1,6 @@
 "use server";
 
-import mongoose, { Error, FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 
 import Question, { IQuestionDoc } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
@@ -191,7 +191,7 @@ export async function getQuestion(
   params: GetQuestionParams
 ): Promise<ActionResponse<Question>> {
   const validationResult = await action({
-    params,
+    params, 
     schema: GetQuestionSchema,
     authorize: true,
   });
@@ -203,7 +203,9 @@ export async function getQuestion(
   const { questionId } = validationResult.params!;
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await Question.findById(questionId)
+      .populate("tags")
+      .populate("author", "_id name image");
 
     if (!question) {
       throw new Error("Question not found");
