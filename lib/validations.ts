@@ -175,7 +175,6 @@ export const AIAnswerSchema = z.object({
   userAnswer: z.string().optional(),
 });
 
-
 export const CreateVoteSchema = z.object({
   targetId: z.string().min(1, { message: "Target ID is required." }),
   targetType: z.enum(["question", "answer"], {
