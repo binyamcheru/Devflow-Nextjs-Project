@@ -41,7 +41,6 @@ const SaveQuestion = ({ questionId }: { questionId: string }) => {
     }
   };
 
-  console.log("hasSaved", hasSaved);
 
   return (
     <Image
