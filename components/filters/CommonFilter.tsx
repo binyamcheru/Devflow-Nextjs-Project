@@ -10,7 +10,7 @@ import {
   SelectContent,
   SelectGroup,
 } from "@/components/ui/select";
-import { formUrlQuery } from "@/lib/urls";
+import { formUrlQuery } from "@/lib/url";
 import { cn } from "@/lib/utils";
 
 interface Filter {
