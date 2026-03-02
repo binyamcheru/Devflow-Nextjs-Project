@@ -17,7 +17,7 @@ export async function getUsers(
   });
 
   if (validationResult instanceof Error) {
-    return handleError(validationResult) as ErrorResponse;
+  return handleError(validationResult) as ErrorResponse;
   }
 
   const { page = 1, pageSize = 10, query, filter } = params;
@@ -75,7 +75,7 @@ export async function getUsers(
 
 export async function getUser(params: GetUserParams): Promise<
   ActionResponse<{
-    user: typeof User;
+    user: User;
     totalQuestions: number;
     totalAnswers: number;
   }>
