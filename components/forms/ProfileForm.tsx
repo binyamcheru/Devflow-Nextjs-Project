@@ -5,7 +5,7 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
