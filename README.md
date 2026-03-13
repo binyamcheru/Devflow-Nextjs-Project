@@ -1,9 +1,10 @@
-# Devflow Next.js Project
+# Devflow
 
-Welcome to the **Devflow Next.js Project**, a modern web application built with [Next.js](https://nextjs.org). This project is designed to provide a robust and scalable foundation for building dynamic web applications.
+Devflow is a modern web application inspired by **Stack Overflow**, enhanced with **AI-powered features** to provide an intelligent and interactive platform for developers to ask questions, share knowledge, and collaborate effectively.
 
 ## Features
 
+- **AI Integration**: Get AI-generated answers and suggestions for your questions.
 - **Authentication System**: Includes sign-in and sign-up pages.
 - **Dynamic Routing**: Organized folder structure for pages and components.
 - **Reusable Components**: A library of UI components such as buttons, forms, and cards.
@@ -17,7 +18,7 @@ Follow these steps to set up and run the project locally:
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/binyamcheru/Devflow-Nextjs-Project.git
    ```
 2. Navigate to the project directory:
    ```bash
