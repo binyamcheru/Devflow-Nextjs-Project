@@ -23,7 +23,7 @@ const Metric = ({
   href,
   textStyles,
   imgStyles,
-  isAuthor,
+  isAuthor: _isAuthor,
   titleStyles,
 }: Props) => {
   const metricContent = (

@@ -109,7 +109,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
             id: loadingToast,
           });
 
-          if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+          if (result.data) router.push(ROUTES.QUESTION(result.data._id.toString()));
         } else {
           toast.error(
             result.error?.message ||
@@ -128,7 +128,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           id: loadingToast,
         });
 
-        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+        if (result.data) router.push(ROUTES.QUESTION(result.data._id.toString()));
       } else {
         toast.error(
           result.error?.message ||

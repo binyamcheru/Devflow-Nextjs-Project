@@ -1,4 +1,4 @@
-("use client");
+"use client";
 
 import "@mdxeditor/editor/style.css";
 import type { ForwardedRef } from "react";
@@ -40,7 +40,7 @@ interface Props {
   fieldChange: (value: string) => void;
 }
 
-const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
+const Editor = ({ value, editorRef, fieldChange }: Props) => {
   const { resolvedTheme } = useTheme();
   const theme = resolvedTheme === "dark" ? [basicDark] : [];
 

@@ -25,7 +25,10 @@ const eslintConfig = [
     rules: {
       "react/react-in-jsx-scope": "off",
     },
-    ignorePatterns: ["components/ui/**"],
+  },
+
+  {
+    ignores: ["components/ui/**"],
   },
 
   {
